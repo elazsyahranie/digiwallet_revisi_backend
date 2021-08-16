@@ -1,6 +1,6 @@
 const helper = require('../../helpers/wrapper')
 const bcrypt = require('bcrypt')
-const authModel = require('./auth_model')
+const userModel = require('./user_model')
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
@@ -11,7 +11,7 @@ module.exports = {
       let { page, limit } = req.query
       page = parseInt(page)
       limit = parseInt(limit)
-      const totalData = await authModel.getDataCount()
+      const totalData = await userModel.getDataCount()
       console.log('Total Data: ' + totalData)
       const totalPage = Math.ceil(totalData / limit)
       console.log('Total Page: ' + totalPage)
@@ -22,7 +22,7 @@ module.exports = {
         limit,
         totalData
       }
-      const result = await authModel.getDataAll(limit, offset)
+      const result = await userModel.getDataAll(limit, offset)
       return helper.response(res, 200, 'Success Get Data', result, pageInfo)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -33,7 +33,7 @@ module.exports = {
       let { page, limit } = req.query
       page = parseInt(page)
       limit = parseInt(limit)
-      const totalData = await authModel.getDataCount()
+      const totalData = await userModel.getDataCount()
       console.log('Total Data: ' + totalData)
       const totalPage = Math.ceil(totalData / limit)
       console.log('Total Page: ' + totalPage)
@@ -44,7 +44,7 @@ module.exports = {
         limit,
         totalData
       }
-      const result = await authModel.getDataAllAscending(limit, offset)
+      const result = await userModel.getDataAllAscending(limit, offset)
       return helper.response(res, 200, 'Success Get Data', result, pageInfo)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -53,7 +53,7 @@ module.exports = {
   getUsernameSearchKeyword: async (req, res) => {
     try {
       const { keyword } = req.query
-      const result = await authModel.getUserSearchKeyword(keyword)
+      const result = await userModel.getUserSearchKeyword(keyword)
       return helper.response(
         res,
         200,
@@ -75,12 +75,12 @@ module.exports = {
         user_password: encryptPassword
       }
 
-      const checkEmailUser = await authModel.getDataByCondition({
+      const checkEmailUser = await userModel.getDataByCondition({
         user_email: userEmail
       })
 
       if (checkEmailUser.length === 0) {
-        const result = await authModel.register(setData)
+        const result = await userModel.register(setData)
         // console.log(result)
         // console.log(result.id)
         delete result.user_password
@@ -122,7 +122,7 @@ module.exports = {
     try {
       // console.log(req.body)
       const { userEmail, userPassword } = req.body
-      const checkUserEmail = await authModel.getDataConditions({
+      const checkUserEmail = await userModel.getDataConditions({
         user_email: userEmail
       })
 
@@ -159,7 +159,7 @@ module.exports = {
   getUserById: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await authModel.getDataById(id)
+      const result = await userModel.getDataById(id)
       console.log(result)
       if (result.length > 0) {
         // client.set(`getmovie:${id}`, JSON.stringify(result))
@@ -179,22 +179,23 @@ module.exports = {
   updateUser: async (req, res) => {
     try {
       const { id } = req.params
-      const { userName, emailName, phoneNumber } = req.body
+      const { userEmail, userPhone, userName } = req.body
       const setData = {
-        user_name: userName,
-        user_email: emailName,
-        user_phone: phoneNumber
+        user_email: userEmail,
+        user_phone: userPhone,
+        user_name: userName
       }
-      const result = await authModel.updateData(setData, id)
+      const result = await userModel.updateData(setData, { user_id: id })
       return helper.response(res, 200, 'Success Update User', result)
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
   deleteUser: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await authModel.deleteData(id)
+      const result = await userModel.deleteData(id)
       return helper.response(res, 200, `Success Delete User ${id}`, result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -227,7 +228,7 @@ module.exports = {
 
       if (userId && setData) {
         // console.log('Update', setData)
-        const result = await authModel.updateData(setData, userId)
+        const result = await userModel.updateData(setData, userId)
         return helper.response(
           res,
           200,
