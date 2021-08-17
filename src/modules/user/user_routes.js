@@ -11,6 +11,7 @@ const {
   getUserById,
   changeUserVerification,
   updateUser,
+  updatePin,
   deleteUser
 } = require('./user_controller')
 
@@ -22,5 +23,6 @@ Route.post('/login', login)
 Route.get('/:id', getUserById)
 Route.get('/verify-user/:token', changeUserVerification)
 Route.patch('/:id', updateUser)
+Route.patch('/update-pin/:id', updatePin)
 Route.delete('/:id', deleteUser)
 module.exports = Route

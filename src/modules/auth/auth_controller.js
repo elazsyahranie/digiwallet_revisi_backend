@@ -140,6 +140,7 @@ module.exports = {
           console.log('User berhasil login')
           const payload = checkUserEmail[0]
           delete payload.user_password
+          delete payload.user_pin
           const token = jwt.sign({ ...payload }, process.env.PRIVATE_KEY, {
             expiresIn: '24h'
           })
@@ -205,10 +206,10 @@ module.exports = {
       let token = req.params.token
       let userId = ''
       let setData = {}
-      console.log(`This is the token! ${token}`)
       if (/^\d+$/.test(token)) {
         userId = token
         setData = { user_verification: 1 }
+        console.log(`This is the token! ${userId}`)
       } else {
         jwt.verify(token, process.env.PRIVATE_KEY, (error, result) => {
           if (

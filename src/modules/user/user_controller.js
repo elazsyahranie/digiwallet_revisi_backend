@@ -176,6 +176,28 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  updatePin: async (req, res) => {
+    try {
+      const { id } = req.params
+      const { userPin } = req.body
+      const salt = bcrypt.genSaltSync(10)
+      const encryptPin = bcrypt.hashSync(userPin, salt)
+      const setData = {
+        user_pin: encryptPin
+      }
+      console.log(setData)
+      const result = await userModel.updateData(setData, id)
+      return helper.response(
+        res,
+        200,
+        `Success Update User Pin By Id: ${id}`,
+        result
+      )
+    } catch (error) {
+      console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   updateUser: async (req, res) => {
     try {
       const { id } = req.params
@@ -187,7 +209,12 @@ module.exports = {
       }
       console.log(setData)
       const result = await userModel.updateData(setData, id)
-      return helper.response(res, 200, 'Success Update User', result)
+      return helper.response(
+        res,
+        200,
+        `Success Update User Data By Id: ${id}`,
+        result
+      )
     } catch (error) {
       console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
