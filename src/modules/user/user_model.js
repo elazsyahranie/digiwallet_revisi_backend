@@ -89,10 +89,30 @@ module.exports = {
       )
     })
   },
+  updatePin: (setData, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE user SET ? WHERE user_id = ${id}`,
+        setData,
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              id: id,
+              ...setData
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
   updateData: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `UPDATE user SET ${setData} WHERE ${id}`,
+        `UPDATE user SET ? WHERE user_id = ${id}`,
+        setData,
         (error, result) => {
           if (!error) {
             const newResult = {

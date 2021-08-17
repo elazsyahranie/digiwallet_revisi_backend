@@ -185,7 +185,8 @@ module.exports = {
         user_phone: userPhone,
         user_name: userName
       }
-      const result = await userModel.updateData(setData, { user_id: id })
+      console.log(setData)
+      const result = await userModel.updateData(setData, id)
       return helper.response(res, 200, 'Success Update User', result)
     } catch (error) {
       console.log(error)
