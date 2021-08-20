@@ -159,10 +159,9 @@ module.exports = {
   getUserById: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await userModel.getDataById(id)
+      const result = await userModel.getDataByCondition({ user_id: id })
       console.log(result)
       if (result.length > 0) {
-        // client.set(`getmovie:${id}`, JSON.stringify(result))
         return helper.response(res, 200, 'Success Get Data By Id', result)
       } else {
         return helper.response(

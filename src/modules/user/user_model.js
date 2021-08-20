@@ -81,7 +81,7 @@ module.exports = {
   getDataById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM user JOIN balance ON user.user_id = balance.user_id WHERE user.user_id = ${id}`,
+        `SELECT * FROM user WHERE user_id = ${id}`,
         (error, result) => {
           console.log(error)
           !error ? resolve(result) : reject(new Error(error))

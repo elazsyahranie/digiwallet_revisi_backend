@@ -8,7 +8,6 @@ const {
   getUsernameSearchKeyword,
   register,
   login,
-  getUserById,
   changeUserVerification,
   updateUser,
   deleteUser
@@ -19,7 +18,6 @@ Route.get('/keyword', getUsernameSearchKeyword)
 Route.get('/ascend', getAllUsernameAscending)
 Route.post('/register', register)
 Route.post('/login', login)
-Route.get('/:id', getUserById)
 Route.get('/verify-user/:token', changeUserVerification)
 Route.patch('/:id', updateUser)
 Route.delete('/:id', deleteUser)
