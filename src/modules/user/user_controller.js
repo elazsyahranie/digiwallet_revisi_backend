@@ -225,6 +225,7 @@ module.exports = {
         return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
       }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
