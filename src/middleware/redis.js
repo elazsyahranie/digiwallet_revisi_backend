@@ -23,35 +23,16 @@ module.exports = {
       })
     }
   },
-  getBalanceByConditionRedis: (req, res, next) => {
-    const { id } = req.params
-    if (id) {
-      client.get(`getbalanceuserid:${id}`, (error, result) => {
+  getUserSearchKeywordRedis: (req, res, next) => {
+    const { keyword } = req.query
+    if (keyword) {
+      client.get(`getusersearch:${keyword}`, (error, result) => {
         if (!error && result != null) {
           console.log('data ada di dalam redis')
           return helper.response(
             res,
             200,
-            `Succes Get Balance by User Id ${id} (Redis)`,
-            JSON.parse(result)
-          )
-        } else {
-          console.log('data tidak ada dalam redis')
-          next()
-        }
-      })
-    }
-  },
-  getTransactionByConditionRedis: (req, res, next) => {
-    const { id } = req.params
-    if (id) {
-      client.get(`gettransactionuserid:${id}`, (error, result) => {
-        if (!error && result != null) {
-          console.log('data ada di dalam redis')
-          return helper.response(
-            res,
-            200,
-            `Succes Get Transaction Data by User Id ${id} (Redis)`,
+            `Succes Get User by Keyword: ${keyword} (Redis)`,
             JSON.parse(result)
           )
         } else {

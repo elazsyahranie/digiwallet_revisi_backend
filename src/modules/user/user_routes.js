@@ -4,6 +4,7 @@ const Route = express.Router()
 
 const {
   getUserByIdRedis,
+  getUserSearchKeywordRedis,
   clearDataUserRedis
 } = require('../../middleware/redis')
 
@@ -21,7 +22,7 @@ const {
 } = require('./user_controller')
 
 Route.get('/', getAllUser)
-Route.get('/keyword', getUsernameSearchKeyword)
+Route.get('/keyword', getUserSearchKeywordRedis, getUsernameSearchKeyword)
 Route.get('/ascend', getAllUsernameAscending)
 Route.get('/:id', getUserByIdRedis, getUserById)
 Route.post('/register', register)

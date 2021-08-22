@@ -57,6 +57,7 @@ module.exports = {
     try {
       const { keyword } = req.query
       const result = await userModel.getUserSearchKeyword(keyword)
+      client.set(`getusersearch:${keyword}`, JSON.stringify(result))
       return helper.response(
         res,
         200,
