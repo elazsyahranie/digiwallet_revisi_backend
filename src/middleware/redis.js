@@ -1,6 +1,7 @@
 const redis = require('redis')
 const client = redis.createClient()
 const helper = require('../helpers/wrapper')
+// const helperUser = require('../helpers/wrapperUser')
 
 module.exports = {
   getUserByIdRedis: (req, res, next) => {
@@ -61,7 +62,7 @@ module.exports = {
     }
   },
   clearDataUserRedis: (req, res, next) => {
-    client.keys('getdata*', (_error, result) => {
+    client.keys('getuser*', (_error, result) => {
       console.log('isi key dalam redis', result)
       if (result.length > 0) {
         result.forEach((item) => {

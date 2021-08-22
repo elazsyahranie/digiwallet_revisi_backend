@@ -1,4 +1,5 @@
 const helper = require('../../helpers/wrapper')
+// const helperUser = require('../../helpers/wrapperUser')
 const bcrypt = require('bcrypt')
 const redis = require('redis')
 const client = redis.createClient()
@@ -175,17 +176,13 @@ module.exports = {
         resultBalance.length > 0 &&
         resultTransactionHistory.length > 0
       ) {
-        client.set(
-          `getuserid:${id}`,
-          JSON.stringify(result, resultBalance, resultTransactionHistory)
-        )
+        const allResults = { result, resultBalance, resultTransactionHistory }
+        client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
           200,
           `Success Get Data By Id ${id}, with User, Balance and Transaction History!`,
-          result,
-          resultBalance,
-          resultTransactionHistory
+          allResults
         )
       }
       // USER and TRANSACTION HISTORY available, but not BALANCE
@@ -194,16 +191,13 @@ module.exports = {
         resultBalance.length === 0 &&
         resultTransactionHistory.length > 0
       ) {
-        client.set(
-          `getuserid:${id}`,
-          JSON.stringify({ result, resultTransactionHistory })
-        )
+        const allResults = { result, resultTransactionHistory }
+        client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
           200,
           `Success Get Data By Id ! ${id}, with User and Transaction History but no Balance!`,
-          result,
-          resultTransactionHistory
+          allResults
         )
       }
       // USER and BALANCE available, but not TRANSACTION HISTORY
@@ -212,12 +206,13 @@ module.exports = {
         resultBalance.length > 0 &&
         resultTransactionHistory.length === 0
       ) {
+        const allResults = { result, resultBalance }
+        client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
           200,
           `Success Get Data By Id ! ${id}, with User and Balance but no Transaction History!`,
-          result,
-          resultBalance
+          allResults
         )
       }
       // USER available, but not BALANCE and TRANSACTION HISTORY
@@ -226,12 +221,13 @@ module.exports = {
         resultBalance.length === 0 &&
         resultTransactionHistory.length === 0
       ) {
-        client.set(`getuserid:${id}`, JSON.stringify(result))
+        const allResults = { result }
+        client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
           200,
-          `Success Get Data By Id ! ${id}, only User and Transaction History but no Balance!`,
-          result
+          `Success Get Data By Id ! ${id}, only User but no Transaction History and Balance!`,
+          allResults
         )
       } else {
         return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
