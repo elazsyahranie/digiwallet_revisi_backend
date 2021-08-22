@@ -6,11 +6,34 @@ module.exports = {
   getBalanceById: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await balanceModel.getDataById(id)
+      const result = await balanceModel.getDataById({ balance_id: id })
       if (result.length > 0) {
         return helper.response(res, 200, 'Success Get Balance By Id', result)
       } else {
         return helper.response(res, 200, 'No Balance With Such ID !', null)
+      }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getBalanceByUserId: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await balanceModel.getDataById({ user_id: id })
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          `Success Get Balance By User Id: ${id}`,
+          result
+        )
+      } else {
+        return helper.response(
+          res,
+          200,
+          `No Balance With Such ID ${id} !`,
+          null
+        )
       }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)

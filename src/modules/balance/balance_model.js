@@ -4,8 +4,8 @@ module.exports = {
   getDataById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM balance WHERE user_id = ?',
-        id,
+        'SELECT * FROM balance WHERE ?',
+        [id],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }

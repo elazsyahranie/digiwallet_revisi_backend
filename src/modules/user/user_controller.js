@@ -160,16 +160,69 @@ module.exports = {
     try {
       const { id } = req.params
       const result = await userModel.getDataByCondition({ user_id: id })
-      console.log(result)
-      if (result.length > 0) {
-        return helper.response(res, 200, 'Success Get Data By Id', result)
-      } else {
+      const resultBalance = await userModel.getDataBalanceByCondition({
+        user_id: id
+      })
+      const resultTransactionHistory =
+        await userModel.getDataTransactionByCondition({
+          transaction_sender_id: id
+        })
+      // USER, BALANCE and TRANSACTION HISTORY available
+      if (
+        result.length > 0 &&
+        resultBalance.length > 0 &&
+        resultTransactionHistory.length > 0
+      ) {
         return helper.response(
           res,
           200,
-          'Success Get Data By Id ... Not Found !',
-          null
+          `Success Get Data By Id ${id}, with User, Balance and Transaction History!`,
+          result,
+          resultBalance
         )
+      }
+      // USER and TRANSACTION HISTORY available, but not BALANCE
+      if (
+        result.length > 0 &&
+        resultBalance.length === 0 &&
+        resultTransactionHistory.length > 0
+      ) {
+        return helper.response(
+          res,
+          200,
+          `Success Get Data By Id ! ${id}, with User and Transaction History but no Balance!`,
+          result,
+          resultTransactionHistory
+        )
+      }
+      // USER and BALANCE available, but not TRANSACTION HISTORY
+      if (
+        result.length > 0 &&
+        resultBalance.length > 0 &&
+        resultTransactionHistory.length === 0
+      ) {
+        return helper.response(
+          res,
+          200,
+          `Success Get Data By Id ! ${id}, with User and Balance but no Transaction History!`,
+          result,
+          resultBalance
+        )
+      }
+      // USER available, but not BALANCE and TRANSACTION HISTORY
+      if (
+        result.length > 0 &&
+        resultBalance.length === 0 &&
+        resultTransactionHistory.length === 0
+      ) {
+        return helper.response(
+          res,
+          200,
+          `Success Get Data By Id ! ${id}, only User and Transaction History but no Balance!`,
+          result
+        )
+      } else {
+        return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
       }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)

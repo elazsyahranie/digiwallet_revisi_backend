@@ -78,6 +78,28 @@ module.exports = {
       )
     })
   },
+  getDataBalanceByCondition: (condition) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM balance WHERE ?',
+        condition,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getDataTransactionByCondition: (condition) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM transaction WHERE ?',
+        condition,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   getDataById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
