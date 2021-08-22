@@ -192,7 +192,7 @@ module.exports = {
         resultBalance.length === 0 &&
         resultTransactionHistory.length > 0
       ) {
-        const allResults = { result, resultTransactionHistory }
+        const allResults = { result, resultBalance, resultTransactionHistory }
         client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
@@ -207,7 +207,7 @@ module.exports = {
         resultBalance.length > 0 &&
         resultTransactionHistory.length === 0
       ) {
-        const allResults = { result, resultBalance }
+        const allResults = { result, resultBalance, resultTransactionHistory }
         client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
@@ -222,7 +222,7 @@ module.exports = {
         resultBalance.length === 0 &&
         resultTransactionHistory.length === 0
       ) {
-        const allResults = { result }
+        const allResults = { result, resultBalance, resultTransactionHistory }
         client.set(`getuserid:${id}`, JSON.stringify(allResults))
         return helper.response(
           res,
