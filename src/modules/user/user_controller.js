@@ -1,5 +1,7 @@
 const helper = require('../../helpers/wrapper')
 const bcrypt = require('bcrypt')
+const redis = require('redis')
+const client = redis.createClient()
 const userModel = require('./user_model')
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
@@ -173,12 +175,17 @@ module.exports = {
         resultBalance.length > 0 &&
         resultTransactionHistory.length > 0
       ) {
+        client.set(
+          `getuserid:${id}`,
+          JSON.stringify(result, resultBalance, resultTransactionHistory)
+        )
         return helper.response(
           res,
           200,
           `Success Get Data By Id ${id}, with User, Balance and Transaction History!`,
           result,
-          resultBalance
+          resultBalance,
+          resultTransactionHistory
         )
       }
       // USER and TRANSACTION HISTORY available, but not BALANCE
@@ -187,6 +194,10 @@ module.exports = {
         resultBalance.length === 0 &&
         resultTransactionHistory.length > 0
       ) {
+        client.set(
+          `getuserid:${id}`,
+          JSON.stringify({ result, resultTransactionHistory })
+        )
         return helper.response(
           res,
           200,
@@ -215,6 +226,7 @@ module.exports = {
         resultBalance.length === 0 &&
         resultTransactionHistory.length === 0
       ) {
+        client.set(`getuserid:${id}`, JSON.stringify(result))
         return helper.response(
           res,
           200,
