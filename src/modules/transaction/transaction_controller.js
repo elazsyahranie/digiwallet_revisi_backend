@@ -24,7 +24,13 @@ module.exports = {
   },
   postTransaction: async (req, res) => {
     try {
-      const { senderId, senderPin, receiverId, transactionValue } = req.body
+      const {
+        senderId,
+        senderPin,
+        receiverId,
+        transactionValue,
+        transactionNotes
+      } = req.body
       const checkSenderAccount = await transactionModel.getUserDataConditions({
         user_id: senderId
       })
@@ -37,7 +43,8 @@ module.exports = {
           const setData = {
             transaction_sender_id: senderId,
             transaction_receiver_id: receiverId,
-            transaction_amount: transactionValue
+            transaction_amount: transactionValue,
+            transaction_notes: transactionNotes
           }
           const resultPostTransaction =
             await transactionModel.insertTransaction(setData)
@@ -58,23 +65,23 @@ module.exports = {
             userReceiverId,
             decreaseBalance
           )
-          // const balanceSender = Buat model Get Data Balance By Sender Id
-          // const updateDataBalanceSender = {
-          // Ambil data dari balance
-          // } Bikin model untuk update data balance berdasakan sender id
-          // Nah disini controller untuk receiver, tambah data berarti. Sama kayak di atas
+          const allResult = { resultPostTransaction, resultSender }
+          return helper.response(res, 200, 'Transaction Succesful', allResult)
+        } else {
           return helper.response(
             res,
-            200,
-            'Transaction Succesful',
-            resultPostTransaction,
-            resultSender
+            400,
+            "There's mistake in the PIN code you've entered!",
+            null
           )
-        } else {
-          console.log("There's mistake in the PIN code you've entered!")
         }
       } else {
-        console.log(`Data by Id: ${senderId} not found!`)
+        return helper.response(
+          res,
+          404,
+          `Data by Id: ${senderId} not found!`,
+          null
+        )
       }
     } catch (error) {
       console.log(error)
