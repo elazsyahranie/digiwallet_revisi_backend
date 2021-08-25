@@ -22,6 +22,24 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  getTransactionAndUser: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await transactionModel.getTransactionByUserId(id)
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          'Success Get Transaction By Id',
+          result
+        )
+      } else {
+        return helper.response(res, 200, 'No Transaction With Such ID !', null)
+      }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   postTransaction: async (req, res) => {
     try {
       const {

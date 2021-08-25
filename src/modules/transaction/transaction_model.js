@@ -12,6 +12,17 @@ module.exports = {
       )
     })
   },
+  getTransactionByUserId: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM transaction WHERE transaction_sender_id = ?',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   getUserDataConditions: (data) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM user WHERE ?', data, (error, result) => {
