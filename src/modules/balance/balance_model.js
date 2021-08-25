@@ -31,6 +31,25 @@ module.exports = {
       )
     })
   },
+  updateBalanceAmount: (setData, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE balance SET ? WHERE user_id = ?',
+        [setData, id],
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              id: id,
+              ...setData
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
   deleteData: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(

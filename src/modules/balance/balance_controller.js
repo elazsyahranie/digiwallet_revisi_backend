@@ -39,6 +39,30 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  topUpBalance: async (req, res) => {
+    try {
+      const { id } = req.params
+      const { balanceTopUp } = req.body
+      const balanceData = await balanceModel.getDataById({ user_id: id })
+      if (balanceData.length > 0) {
+        const setData = {
+          balance: balanceData[0].balance + parseInt(balanceTopUp)
+        }
+        console.log(setData)
+        const result = await balanceModel.updateBalanceAmount(setData, id)
+        return helper.response(res, 200, 'Top Up success!', result)
+      } else {
+        return helper.response(
+          res,
+          200,
+          `No Balance With Such ID ${id} !`,
+          null
+        )
+      }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   updateBalance: async (req, res) => {
     try {
       const { id } = req.params

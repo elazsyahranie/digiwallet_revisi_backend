@@ -1,14 +1,17 @@
 const express = require('express')
 const Route = express.Router()
-// const authController = require('./auth_controller')
+
+// const { clearDataUserRedis } = require('../../middleware/redis')
 
 const {
   getBalanceById,
   getBalanceByUserId,
-  updateBalance
+  updateBalance,
+  topUpBalance
 } = require('./balance_controller')
 
 Route.get('/:id', getBalanceById)
 Route.get('/userBalance', getBalanceByUserId)
 Route.patch('/:id', updateBalance)
+Route.patch('/top-up/:id', topUpBalance)
 module.exports = Route
