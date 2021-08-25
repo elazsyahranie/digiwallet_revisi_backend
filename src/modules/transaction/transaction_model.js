@@ -12,12 +12,22 @@ module.exports = {
       )
     })
   },
-  getTransactionByUserId: (id) => {
+  getDataCount: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM transaction WHERE transaction_sender_id = ?',
-        id,
+        'SELECT COUNT(*) AS total FROM transaction',
         (error, result) => {
+          !error ? resolve(result[0].total) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getTransactionByUserId: (id, limit, offset) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM transaction WHERE transaction_sender_id = ${id} LIMIT ${limit} OFFSET ${offset}`,
+        (error, result) => {
+          console.log(error)
           !error ? resolve(result) : reject(new Error(error))
         }
       )

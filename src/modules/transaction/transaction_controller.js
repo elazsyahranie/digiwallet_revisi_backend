@@ -25,13 +25,32 @@ module.exports = {
   getTransactionAndUser: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await transactionModel.getTransactionByUserId(id)
+      let { page, limit } = req.query
+      page = parseInt(page)
+      limit = parseInt(limit)
+      const totalData = await transactionModel.getDataCount()
+      console.log('Total Data: ' + totalData)
+      const totalPage = Math.ceil(totalData / limit)
+      console.log('Total Page: ' + totalPage)
+      const offset = page * limit - limit
+      const pageInfo = {
+        page,
+        totalPage,
+        limit,
+        totalData
+      }
+      const result = await transactionModel.getTransactionByUserId(
+        id,
+        limit,
+        offset
+      )
       if (result.length > 0) {
         return helper.response(
           res,
           200,
           'Success Get Transaction By Id',
-          result
+          result,
+          pageInfo
         )
       } else {
         return helper.response(res, 200, 'No Transaction With Such ID !', null)
