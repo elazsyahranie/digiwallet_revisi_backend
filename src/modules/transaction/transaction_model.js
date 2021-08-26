@@ -25,7 +25,7 @@ module.exports = {
   getTransactionByUserId: (id, limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM transaction LEFT JOIN user on transaction.transaction_receiver_id = user.user_id WHERE transaction_sender_id = ${id} LIMIT ${limit} OFFSET ${offset}`,
+        `SELECT * FROM transaction LEFT JOIN user on transaction.transaction_receiver_id = user.user_id WHERE transaction_sender_id = ${id} OR transaction_receiver_id = ${id} LIMIT ${limit} OFFSET ${offset}`,
         (error, result) => {
           console.log(error)
           !error ? resolve(result) : reject(new Error(error))
