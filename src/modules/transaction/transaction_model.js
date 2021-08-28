@@ -11,20 +11,31 @@ module.exports = {
       )
     })
   },
-  getTransactionSenderById: (id) => {
+  getTransactionByCondition: (condition) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM transaction INNER JOIN user ON transaction.transaction_sender_id = user.user_id WHERE transaction_sender_id = ${id}`,
+        'SELECT * FROM transaction WHERE ?',
+        condition,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
       )
     })
   },
-  getTransactionReceiverById: (id) => {
+  getTransactionSenderById: (id, limit) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM transaction INNER JOIN user ON transaction.transaction_sender_id = user.user_id WHERE transaction_receiver_id = ${id}`,
+        `SELECT * FROM transaction INNER JOIN user ON transaction.transaction_sender_id = user.user_id WHERE transaction_sender_id = ${id} LIMIT ${limit}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getTransactionReceiverById: (id, limit) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM transaction INNER JOIN user ON transaction.transaction_sender_id = user.user_id WHERE transaction_receiver_id = ${id} LIMIT ${limit}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }

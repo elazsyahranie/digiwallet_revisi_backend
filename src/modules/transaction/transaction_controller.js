@@ -7,40 +7,19 @@ module.exports = {
   getTransactionById: async (req, res) => {
     try {
       const { id } = req.params
-      // const resultSender = await transactionModel.getTransactionSenderById(id)
-      // const resultReceiver = await transactionModel.getTransactionReceiverById(
-      //   id
-      // )
-      let { limit } = req.query
-      // page = parseInt(page)
-      // limit = parseInt(limit)
-      // const totalData = await transactionModel.getDataCount()
-      // // console.log('Total Data: ' + totalData)
-      // const totalPage = Math.ceil(totalData / limit)
-      // // console.log('Total Page: ' + totalPage)
-      // const offset = page * limit - limit
-      // const pageInfo = {
-      //   page,
-      //   totalPage,
-      //   limit,
-      //   totalData
-      // }
-      const resultSender = await transactionModel.getTransactionSenderById(
-        id
-        // limit,
-        // offset
-      )
-      const resultReceiver = await transactionModel.getTransactionReceiverById(
-        id
-        // limit,
-        // offset
-      )
-      let result = [...resultSender, ...resultReceiver]
-      if (limit) {
-        result = result.slice(0, limit)
+      const result = await transactionModel.getTransactionByCondition({
+        transaction_id: id
+      })
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          'Success Get Transaction By Id',
+          result
+        )
+      } else {
+        return helper.response(res, 200, 'Transaction Not Found!', result)
       }
-      console.log(result.length)
-      return helper.response(res, 200, 'Success Get Transaction By Id', result)
     } catch (error) {
       console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
@@ -49,37 +28,33 @@ module.exports = {
   getTransactionAndUser: async (req, res) => {
     try {
       const { id } = req.params
-      let { page, limit } = req.query
-      page = parseInt(page)
+      let { limit } = req.query
       limit = parseInt(limit)
-      const totalData = await transactionModel.getDataCount()
-      // console.log('Total Data: ' + totalData)
-      const totalPage = Math.ceil(totalData / limit)
-      // console.log('Total Page: ' + totalPage)
-      const offset = page * limit - limit
-      const pageInfo = {
-        page,
-        totalPage,
-        limit,
-        totalData
-      }
-      const result = await transactionModel.getTransactionByUserId(
+      const resultSender = await transactionModel.getTransactionSenderById(
         id,
-        limit,
-        offset
+        limit
       )
-      if (result.length > 0) {
-        return helper.response(
-          res,
-          200,
-          'Success Get Transaction By Id',
-          result,
-          pageInfo
-        )
-      } else {
-        return helper.response(res, 200, 'No Transaction With Such ID !', null)
+      const resultReceiver = await transactionModel.getTransactionReceiverById(
+        id,
+        limit
+      )
+      let result = [...resultSender, ...resultReceiver]
+      const pageInfo = {
+        limit
       }
+      if (limit) {
+        result = result.slice(0, limit)
+      }
+      console.log(result.length)
+      return helper.response(
+        res,
+        200,
+        'Success Get Transaction History',
+        result,
+        pageInfo
+      )
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
