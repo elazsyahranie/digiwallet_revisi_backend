@@ -25,7 +25,7 @@ module.exports = {
   getTransactionSenderById: (id, limit) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM transaction INNER JOIN user ON transaction.transaction_sender_id = user.user_id WHERE transaction_sender_id = ${id} LIMIT ${limit}`,
+        `SELECT * FROM transaction INNER JOIN user ON transaction.transaction_receiver_id = user.user_id WHERE transaction_sender_id = ${id} LIMIT ${limit}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
