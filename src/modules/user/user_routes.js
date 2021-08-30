@@ -1,5 +1,6 @@
 const express = require('express')
 const Route = express.Router()
+const uploads = require('../../middleware/uploads')
 // const authController = require('./auth_controller')
 
 const {
@@ -17,6 +18,7 @@ const {
   getUserById,
   changeUserVerification,
   updateUser,
+  updateUserImage,
   updatePin,
   deleteUser
 } = require('./user_controller')
@@ -29,6 +31,7 @@ Route.post('/register', clearDataUserRedis, register)
 Route.post('/login', login)
 Route.get('/verify-user/:token', changeUserVerification)
 Route.patch('/:id', clearDataUserRedis, updateUser)
+Route.patch('/update-image/:id', clearDataUserRedis, uploads, updateUserImage)
 Route.patch('/update-pin/:id', clearDataUserRedis, updatePin)
 Route.delete('/:id', deleteUser)
 module.exports = Route

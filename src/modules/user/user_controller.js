@@ -290,12 +290,38 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
-  deleteUser: async (req, res) => {
+  updateUserImage: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await userModel.deleteData(id)
-      return helper.response(res, 200, `Success Delete User ${id}`, result)
+
+      const checkUserData = await userModel.getDataByCondition({
+        user_id: id
+      })
+
+      const setData = {
+        user_image: req.file ? req.file.filename : '',
+        user_updated_at: new Date(Date.now())
+      }
+
+      console.log(setData)
+      if (checkUserData.length > 0) {
+        const result = await userModel.updateUserImage(setData, { user_id: id })
+        return helper.response(
+          res,
+          200,
+          `Success Update User Image By Id: ${id}`,
+          result
+        )
+      } else {
+        return helper.response(
+          res,
+          404,
+          `User Data By Id ${id} Not Found`,
+          null
+        )
+      }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
@@ -340,6 +366,15 @@ module.exports = {
     } catch (error) {
       console.log('Nope. The Bad Request was from the request itself')
       console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  deleteUser: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await userModel.deleteData(id)
+      return helper.response(res, 200, `Success Delete User ${id}`, result)
+    } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }
