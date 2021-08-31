@@ -33,10 +33,11 @@ module.exports = {
       )
     })
   },
-  getUserSearchKeyword: (keyword) => {
+  getUserSearchKeyword: (keyword, limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM user WHERE user_name LIKE '%${keyword}%'`,
+        `SELECT * FROM user WHERE user_name LIKE '%${keyword}%' LIMIT ? OFFSET ?`,
+        [limit, offset],
         (error, result) => {
           console.log(result)
           !error ? resolve(result) : reject(new Error(error))

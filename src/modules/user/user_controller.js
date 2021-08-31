@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 const helper = require('../../helpers/wrapper')
 // const helperUser = require('../../helpers/wrapperUser')
 const bcrypt = require('bcrypt')
@@ -56,15 +57,38 @@ module.exports = {
   getUsernameSearchKeyword: async (req, res) => {
     try {
       const { keyword } = req.query
-      const result = await userModel.getUserSearchKeyword(keyword)
-      client.set(`getusersearch:${keyword}`, JSON.stringify(result))
+      let { page, limit, sort } = req.query
+
+      page = page ? parseInt(page) : 1
+      limit = limit ? parseInt(limit) : 5
+      sort = sort ? sort : 'user_name ASC'
+
+      const totalData = await userModel.getDataCount()
+      console.log('Total Data: ' + totalData)
+      const totalPage = Math.ceil(totalData / limit)
+      console.log('Total Page: ' + totalPage)
+      const offset = page * limit - limit
+      const pageInfo = {
+        page,
+        totalPage,
+        limit,
+        totalData
+      }
+      const result = await userModel.getUserSearchKeyword(
+        keyword,
+        limit,
+        offset,
+        sort
+      )
       return helper.response(
         res,
         200,
         'Success Find Username By Keyword',
-        result
+        result,
+        pageInfo
       )
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
