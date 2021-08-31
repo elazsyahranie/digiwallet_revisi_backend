@@ -12,21 +12,25 @@ const nodemailer = require('nodemailer')
 module.exports = {
   getAllUser: async (req, res) => {
     try {
-      let { page, limit } = req.query
-      page = parseInt(page)
-      limit = parseInt(limit)
+      let { page, limit, sort, search } = req.query
+      page = page ? parseInt(page) : 1
+      limit = limit ? parseInt(limit) : 5
+      sort = sort ? sort : 'user_id ASC'
+      search = search ? search : ''
       const totalData = await userModel.getDataCount()
       console.log('Total Data: ' + totalData)
       const totalPage = Math.ceil(totalData / limit)
       console.log('Total Page: ' + totalPage)
       const offset = page * limit - limit
+      console.log('offset' + offset)
       const pageInfo = {
         page,
         totalPage,
         limit,
         totalData
       }
-      const result = await userModel.getDataAll(limit, offset)
+      const result = await userModel.getDataAll(limit, offset, sort, search)
+      console.log(result.length)
       return helper.response(res, 200, 'Success Get Data', result, pageInfo)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)

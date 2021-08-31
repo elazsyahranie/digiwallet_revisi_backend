@@ -1,10 +1,10 @@
 const connection = require('../../config/mysql')
 
 module.exports = {
-  getDataAll: (limit, offset) => {
+  getDataAll: (limit, offset, sort, search) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user LIMIT ? OFFSET ?',
+        `SELECT * FROM user WHERE user_name LIKE '%${search}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
         [limit, offset],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
@@ -15,7 +15,7 @@ module.exports = {
   getDataAllAscending: (limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM `user` ORDER BY user_id ASC LIMIT ? OFFSET ?',
+        'SELECT * FROM user WHERE user_name LIMIT ? OFFSET ?',
         [limit, offset],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
