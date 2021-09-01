@@ -122,7 +122,7 @@ module.exports = {
           resultBalance
         )
       } else {
-        return helper.response(res, 400, 'Email Already Registered')
+        return helper.response(res, 400, 'Email already registered')
       }
     } catch (error) {
       console.log(error)
@@ -159,10 +159,10 @@ module.exports = {
           const result = { ...payload, token }
           return helper.response(res, 200, 'Succes Login !', result)
         } else {
-          return helper.response(res, 400, 'Wrong password')
+          return helper.response(res, 400, 'Password incorrect')
         }
       } else {
-        return helper.response(res, 404, 'Email not Registered')
+        return helper.response(res, 404, 'Email not registered')
       }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
