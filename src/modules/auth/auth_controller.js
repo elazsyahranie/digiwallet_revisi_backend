@@ -81,9 +81,13 @@ module.exports = {
 
       if (checkEmailUser.length === 0) {
         const result = await authModel.register(setData)
-        // console.log(result)
-        // console.log(result.id)
+        console.log(result.id)
         delete result.user_password
+        const balanceData = {
+          user_id: result.id,
+          balance: 0
+        }
+        const resultBalance = await authModel.insertBalance(balanceData)
         const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
           port: 587,
@@ -110,11 +114,18 @@ module.exports = {
             return helper.response(res, 200, 'Activation Email Sent')
           }
         })
-        return helper.response(res, 200, 'Success Register User', result)
+        return helper.response(
+          res,
+          200,
+          'Success Register User',
+          result,
+          resultBalance
+        )
       } else {
         return helper.response(res, 400, 'Email Already Registered')
       }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },

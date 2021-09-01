@@ -18,11 +18,11 @@ module.exports = {
       sort = sort ? sort : 'user_id ASC'
       search = search ? search : ''
       const totalData = await userModel.getDataCount()
-      console.log('Total Data: ' + totalData)
+      // console.log('Total Data: ' + totalData)
       const totalPage = Math.ceil(totalData / limit)
-      console.log('Total Page: ' + totalPage)
+      // console.log('Total Page: ' + totalPage)
       const offset = page * limit - limit
-      console.log('offset' + offset)
+      // console.log('offset' + offset)
       const pageInfo = {
         page,
         totalPage,
@@ -113,8 +113,6 @@ module.exports = {
 
       if (checkEmailUser.length === 0) {
         const result = await userModel.register(setData)
-        // console.log(result)
-        // console.log(result.id)
         delete result.user_password
         const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',

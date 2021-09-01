@@ -60,6 +60,22 @@ module.exports = {
       })
     })
   },
+  insertBalance: (data) => {
+    return new Promise((resolve, reject) => {
+      connection.query('INSERT INTO balance SET ?', data, (error, result) => {
+        console.log(error)
+        if (!error) {
+          const newResult = {
+            id: result.insertId,
+            ...data
+          }
+          resolve(newResult)
+        } else {
+          reject(new Error(error))
+        }
+      })
+    })
+  },
   getDataConditions: (data) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM user WHERE ?', data, (error, result) => {
@@ -78,17 +94,6 @@ module.exports = {
       )
     })
   },
-  // getDataById: (id) => {
-  //   return new Promise((resolve, reject) => {
-  //     connection.query(
-  //       `SELECT * FROM user JOIN balance ON user.user_id = balance.user_id WHERE user.user_id = ${id}`,
-  //       (error, result) => {
-  //         console.log(error)
-  //         !error ? resolve(result) : reject(new Error(error))
-  //       }
-  //     )
-  //   })
-  // },
   updateData: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
