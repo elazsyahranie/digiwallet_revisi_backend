@@ -279,11 +279,16 @@ module.exports = {
         transaction_sender_id: id
       })
       if (result.length > 0) {
+        const mappedResult = result.map((a) => a.transaction_amount)
+        let sum = 0
+        for (let i = 0; i < mappedResult.length; i++) {
+          sum += mappedResult[i]
+        }
         return helper.response(
           res,
           200,
-          `Success get transaction data by id - ${id}`,
-          result
+          `Success get expense data by id - ${id}`,
+          sum
         )
       } else {
         return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
