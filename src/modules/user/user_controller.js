@@ -272,6 +272,27 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  getUserExpense: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await userModel.getDataTransactionByCondition({
+        transaction_sender_id: id
+      })
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          `Success get transaction data by id - ${id}`,
+          result
+        )
+      } else {
+        return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
+      }
+    } catch (error) {
+      console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   updatePin: async (req, res) => {
     try {
       const { id } = req.params

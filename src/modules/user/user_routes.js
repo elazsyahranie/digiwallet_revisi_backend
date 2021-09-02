@@ -13,9 +13,8 @@ const {
   getAllUser,
   getAllUsernameAscending,
   getUsernameSearchKeyword,
-  register,
-  login,
   getUserById,
+  getUserExpense,
   changeUserVerification,
   updateUser,
   updateUserPassword,
@@ -28,8 +27,7 @@ Route.get('/', getAllUser)
 Route.get('/keyword', getUserSearchKeywordRedis, getUsernameSearchKeyword)
 Route.get('/ascend', getAllUsernameAscending)
 Route.get('/:id', getUserByIdRedis, getUserById)
-Route.post('/register', clearDataUserRedis, register)
-Route.post('/login', login)
+Route.get('/user-expense/:id', getUserExpense)
 Route.get('/verify-user/:token', changeUserVerification)
 Route.patch('/:id', clearDataUserRedis, updateUser)
 Route.patch('/update-password/:id', clearDataUserRedis, updateUserPassword)
