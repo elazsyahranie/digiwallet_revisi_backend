@@ -324,6 +324,25 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  getUserTransactionListOrderBy: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await userModel.getUserTransactionList(id)
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          `Success get expense data by id - ${id}`,
+          result
+        )
+      } else {
+        return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
+      }
+    } catch (error) {
+      console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   updatePin: async (req, res) => {
     try {
       const { id } = req.params

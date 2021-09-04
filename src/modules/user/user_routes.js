@@ -17,6 +17,7 @@ const {
   getUserExpense,
   getUserIncome,
   changeUserVerification,
+  getUserTransactionListOrderBy,
   updateUser,
   updateUserPassword,
   updateUserImage,
@@ -31,6 +32,7 @@ Route.get('/:id', getUserByIdRedis, getUserById)
 Route.get('/user-expense/:id', getUserExpense)
 Route.get('/user-income/:id', getUserIncome)
 Route.get('/verify-user/:token', changeUserVerification)
+Route.get('/for-chart/:id', getUserTransactionListOrderBy)
 Route.patch('/:id', clearDataUserRedis, updateUser)
 Route.patch('/update-password/:id', clearDataUserRedis, updateUserPassword)
 Route.patch('/update-image/:id', clearDataUserRedis, uploads, updateUserImage)

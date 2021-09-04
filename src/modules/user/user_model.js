@@ -101,6 +101,16 @@ module.exports = {
       )
     })
   },
+  getUserTransactionList: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM transaction WHERE transaction_receiver_id = ${id} OR transaction_sender_id = ${id} ORDER BY transaction_created_at`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   getDataById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
