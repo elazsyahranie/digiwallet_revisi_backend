@@ -298,6 +298,32 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  getUserIncome: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await userModel.getDataTransactionByCondition({
+        transaction_receiver_id: id
+      })
+      if (result.length > 0) {
+        const mappedResult = result.map((a) => a.transaction_amount)
+        let sum = 0
+        for (let i = 0; i < mappedResult.length; i++) {
+          sum += mappedResult[i]
+        }
+        return helper.response(
+          res,
+          200,
+          `Success get expense data by id - ${id}`,
+          sum
+        )
+      } else {
+        return helper.response(res, 200, `Data By Id ${id} Not Found !`, null)
+      }
+    } catch (error) {
+      console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   updatePin: async (req, res) => {
     try {
       const { id } = req.params
