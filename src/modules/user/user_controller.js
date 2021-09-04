@@ -313,7 +313,7 @@ module.exports = {
         return helper.response(
           res,
           200,
-          `Success get expense data by id - ${id}`,
+          `Success get income data by id - ${id}`,
           sum
         )
       } else {
