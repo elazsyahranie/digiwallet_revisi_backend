@@ -332,7 +332,7 @@ module.exports = {
         return helper.response(
           res,
           200,
-          `Success get expense data by id - ${id}`,
+          `Success get data for chart by id - ${id}`,
           result
         )
       } else {

@@ -104,7 +104,7 @@ module.exports = {
   getUserTransactionList: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM transaction WHERE transaction_created_at BETWEEN '2021-08-28' AND '2021-09-05' AND transaction_sender_id = ${id} OR transaction_receiver_id = ${id}`,
+        `SELECT * FROM transaction WHERE WEEK(transaction_created_at) = WEEK(NOW()) AND transaction_sender_id = ${id} OR WEEK(transaction_created_at) = WEEK(NOW()) AND transaction_receiver_id = ${id}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
