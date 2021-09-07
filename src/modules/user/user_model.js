@@ -104,7 +104,7 @@ module.exports = {
   getUserTransactionList: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM transaction WHERE WEEK(transaction_created_at) = WEEK(NOW()) AND transaction_sender_id = ${id} OR WEEK(transaction_created_at) = WEEK(NOW()) AND transaction_receiver_id = ${id}`,
+        `SELECT DATE(transaction_created_at) AS DATE, SUM(transaction_amount) AS totalAmount FROM transaction WHERE transaction_sender_id = ${id} AND WEEK(transaction_created_at) = WEEK(NOW()) GROUP BY DATE(transaction_created_at);`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
