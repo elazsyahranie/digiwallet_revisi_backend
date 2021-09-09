@@ -10,7 +10,7 @@ const routerNavigation = require('./routes')
 const socket = require('socket.io')
 
 const app = express()
-const port = process.env.DB_PORT
+const port = process.env.PORT
 
 app.use(morgan('dev'))
 app.use(cors())
