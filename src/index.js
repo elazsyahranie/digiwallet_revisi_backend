@@ -11,7 +11,7 @@ const socket = require('socket.io')
 const redis = require('redis')
 
 const app = express()
-const port = process.env.DB_PORT
+const port = process.env.PORT
 
 const client = redis.createClient({
   host: process.env.REDIS_HOSTNAME,
