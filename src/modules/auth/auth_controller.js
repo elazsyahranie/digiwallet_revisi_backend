@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const authModel = require('./auth_model')
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer')
+// const nodemailer = require('nodemailer')
 
 module.exports = {
   getAllUser: async (req, res) => {
@@ -88,32 +88,32 @@ module.exports = {
           balance: 0
         }
         const resultBalance = await authModel.insertBalance(balanceData)
-        const transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false, // true for 465, false for other ports
-          auth: {
-            user: process.env.SMTP_EMAIL, // generated ethereal user
-            pass: process.env.SMTP_PASSWORD // generated ethereal password
-          }
-        })
+        // const transporter = nodemailer.createTransport({
+        //   host: 'smtp.gmail.com',
+        //   port: 587,
+        //   secure: false, // true for 465, false for other ports
+        //   auth: {
+        //     user: process.env.SMTP_EMAIL, // generated ethereal user
+        //     pass: process.env.SMTP_PASSWORD // generated ethereal password
+        //   }
+        // })
 
-        const mailOptions = {
-          from: "'DIGIWALLET'", // sender address
-          to: userEmail, // list of receivers
-          subject: 'DIGIWALLET - Activation Email', // Subject line
-          html: `<h6>Hi there! </h6><a href='http://localhost:3003/api/v1/auth/verify-user/${result.id}'>Click here</> to activate your account!` // html body
-        }
+        // const mailOptions = {
+        //   from: "'DIGIWALLET'", // sender address
+        //   to: userEmail, // list of receivers
+        //   subject: 'DIGIWALLET - Activation Email', // Subject line
+        //   html: `<h6>Hi there! </h6><a href='http://localhost:3003/api/v1/auth/verify-user/${result.id}'>Click here</> to activate your account!` // html body
+        // }
 
-        await transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.log(error)
-            return helper.response(res, 400, 'Email Not Send !')
-          } else {
-            console.log('Email sent: ' + info.response)
-            return helper.response(res, 200, 'Activation Email Sent')
-          }
-        })
+        // await transporter.sendMail(mailOptions, function (error, info) {
+        //   if (error) {
+        //     console.log(error)
+        //     return helper.response(res, 400, 'Email Not Send !')
+        //   } else {
+        //     console.log('Email sent: ' + info.response)
+        //     return helper.response(res, 200, 'Activation Email Sent')
+        //   }
+        // })
         return helper.response(
           res,
           200,
