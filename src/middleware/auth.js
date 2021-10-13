@@ -14,10 +14,6 @@ module.exports = {
           return helper.response(res, 403, error.message)
         } else {
           req.decodeToken = result
-          if (req.decodeToken.user_verification === 0) {
-            console.log(req.decodeToken.user_verification)
-            return helper.response(res, 403, 'Please verify your email first !')
-          }
           next()
         }
       })
